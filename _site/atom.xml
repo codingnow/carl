@@ -4,7 +4,7 @@
  <title>Coding</title>
  <link href="http://codingnow.github.io/carl/" rel="self"/>
  <link href="http://codingnow.github.io/carl"/>
- <updated>2013-08-28T15:59:55+08:00</updated>
+ <updated>2013-08-28T16:19:13+08:00</updated>
  <id>http://codingnow.github.io/carl</id>
  <author>
    <name>qh cai</name>
@@ -17,6 +17,14 @@
    <link href="http://codingnow.github.io/carl/2013/08/28/hello-world"/>
    <updated>2013-08-28T00:00:00+08:00</updated>
    <id>http://codingnow.github.io/carl/2013/08/28/hello-world</id>
+   <content type="html"></content>
+ </entry>
+ 
+ <entry>
+   <title>asdfasdf</title>
+   <link href="http://codingnow.github.io/carl/2013/08/28/asdfasdf"/>
+   <updated>2013-08-28T00:00:00+08:00</updated>
+   <id>http://codingnow.github.io/carl/2013/08/28/asdfasdf</id>
    <content type="html"></content>
  </entry>
  
