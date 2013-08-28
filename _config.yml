@@ -7,3 +7,7 @@ safe: true
 lsi: false
 pygments: true
 baseurl:/carl
+url:http://codingnow.github.io.carl
+main_menu:
+- label:About
+  url:about_me.html
