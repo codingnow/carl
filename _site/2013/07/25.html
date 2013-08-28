@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="搭建完整的 Rails 开发环境，包括使用 Rspec 和 Cucumber 测试， 并使用 Zeus 加速 Rails， 使用 Guard 自动化测试等" />
+    <meta name="author" content="唐久军">
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/blog.css">
+    <script type="text/javascript" src="/assets/js/blog.js"></script>
+
+    <title>Rails 通用的测试环境搭建</title>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-39325120-3']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+
+  </head>
+
+  <body>
+<div class="nav nav-fix-top">
+    <div class="navbar-panel">
+        <div class="brand">
+            <a href="/" class="light">唐久军的博客</a>
+        </div>
+
+        <div class="catalog pull-right">
+            <ul>
+                <li><a href="/categories.html">分类</a></li>
+                <li><a href="/tags.html">标签</a></li>
+                <li><a href="/projects.html">项目</a></li>
+                <li><a href="/archives.html">归档</a></li>
+                <li><a href="/about_me.html">关于我</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 防止 IE6、7 中定位元素导致相邻元素 margin-top 失效 -->
+<div style="height: 0px"></div>
+  <div class="well well-header">
+      <ul>
+          <li  class="badge badge-info badge-large pull-right">
+            <a href="/categories.html?#anchorrails">分类：rails</a></li>
+      </ul>
+      <ul>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchor测试">测试</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorRspec">Rspec</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorCucumber">Cucumber</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorZeus">Zeus</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorGuard">Guard</a>
+          </li>
+        
+      </ul>
+
+      <a class="time-backgroud"></a>
+      <span class="time-meta">2013年07月25日</span>
+      <h1>Rails 通用的测试环境搭建</h1>
+      <hr>
+      <p>搭建完整的 Rails 开发环境，包括使用 Rspec 和 Cucumber 测试， 并使用 Zeus 加速 Rails， 使用 Guard 自动化测试等</p>
+  </div>
+
+  <div class="well">
+    <h3>新建 Rails 项目</h3>
+
+<ol>
+<li><p>创建项目</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">rails new demo --skip-bundle -T -O
+</code></pre></div></li>
+<li><p>替换 Gemfile</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">source &#39;http://ruby.taobao.org&#39;
+
+gem &#39;rails&#39;, &#39;3.2.13&#39;
+gem &#39;jquery-rails&#39;
+gem &#39;simple_form&#39;
+gem &quot;slim-rails&quot;
+
+group :assets do
+  gem &#39;sass-rails&#39;,   &#39;~&gt; 3.2.3&#39;
+  gem &#39;coffee-rails&#39;, &#39;~&gt; 3.2.1&#39;
+  gem &#39;therubyracer&#39;, :platforms =&gt; :ruby
+  gem &#39;uglifier&#39;, &#39;&gt;= 1.0.3&#39;
+end
+
+# Gems for test
+group :development do
+    gem &#39;rb-inotify&#39;, :require =&gt; false # Guard needs this
+    gem &#39;libnotify&#39;, :require =&gt; false # Guard needs this
+    gem &#39;zeus&#39;
+    gem &#39;guard-bundler&#39;
+    gem &#39;guard-livereload&#39;
+    gem &#39;guard-rspec&#39;
+    gem &#39;guard-cucumber&#39;
+
+    # debug rails
+    gem &#39;pry-debugger&#39;
+end
+
+group :test do
+    gem &#39;cucumber-rails&#39;, :require =&gt; false
+    gem &#39;capybara&#39;
+    gem &#39;database_cleaner&#39;
+end
+
+group :development, :test do
+    gem &#39;rspec-rails&#39;
+    gem &#39;factory_girl_rails&#39;
+end
+</code></pre></div></li>
+<li><p>Bundle</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">bundle install     # 如果所有 gem 都已安装可以使用 加上 --local 选项
+</code></pre></div></li>
+</ol>
+
+<h3>配置 Rspec</h3>
+
+<ol>
+<li><p>初始化</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">rails g rspec:install
+</code></pre></div></li>
+<li><p>配置 spec/spec_helper.rb</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"># 注视下面这行
+# require &#39;rspec/autorun&#39;
+
+RSpec.configure do |config|
+
+    # database_cleaner 配置
+    config.before(:suite) do
+        DatabaseCleaner.strategy = :transaction
+        DatabaseCleaner.clean_with(:truncation)
+    end
+
+    config.before(:each) do
+        DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+        DatabaseCleaner.clean
+    end
+
+    # FactoryGirl 语法配置
+    config.include FactoryGirl::Syntax::Methods
+
+    # 注视下面这行
+    # config.fixture_path = &quot;#{::Rails.root}/spec/fixtures&quot;
+end
+</code></pre></div></li>
+</ol>
+
+<h3>配置 Cucumber</h3>
+
+<ol>
+<li><p>初始化</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">rails generate cucumber:install
+</code></pre></div></li>
+<li><p>配置 features/support/env.rb</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"># database_cleaner 配置
+begin
+    DatabaseCleaner.strategy = :transaction
+rescue NameError
+    raise &quot;You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it.&quot;
+end
+
+# FactoryGirl 语法混入
+World(FactoryGirl::Syntax::Methods)
+</code></pre></div></li>
+</ol>
+
+<h3>配置 Guard</h3>
+
+<ol>
+<li><p>初始化</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">guard init bundler        # 监测 Gemfile 文件，并自动 bundle install
+guard init rspec
+guard init cucumber
+guard init livereload
+</code></pre></div>
+<p>注意: guard-livereload 作用是当页面文件修改后自动刷新页面，它需要配合其他插件来实现浏览器自动刷新功能。可以使用 <a href="https://github.com/johnbintz/rack-livereload">rack-livereload</a> 或者 安装 <a href="http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-">livereload 谷歌浏览器插件</a></p></li>
+<li><p>配置 Guardfile</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"># 替换
+guard :rspec do
+# 为
+guard :rspec, zeus: true, bundler: false do
+
+# 替换
+guard &#39;cucumber&#39; do
+# 为
+guard &#39;cucumber&#39;, command_prefix: &#39;zeus&#39;, bundler: false, :change_format =&gt; &#39;pretty&#39; do
+</code></pre></div></li>
+</ol>
+
+<h3>启动测试</h3>
+
+<ol>
+<li><p>首先启动 zeus 预加载 rails 环境</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">zeus start
+</code></pre></div></li>
+<li><p>然后启动测试环境</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">guard
+</code></pre></div></li>
+<li><p>现在一套比较通过的 rails 测试开发环境就搭建完成了，它具有一下功能:</p></li>
+</ol>
+
+<ul>
+<li>当 Gemfile 文件有变化时，自动 bundle install</li>
+<li>当项目文件有变化时，guard 会自动执行 rspec 或 cucumber 测试，自动刷新页面</li>
+<li>可以替换以命令 rails 开头的命令为 zeus 开头的命令，在以 rake 开头的命令前加上 zeus 来提高命令执行速度</li>
+</ul>
+
+  </div>
+
+  <!-- 底部导航条 -->
+  <div class="nav nav-fix-bottom"  id="nav-fix-bottom">
+      <div class="navbar-panel">
+          <div id="page-nav-list" class="catalog pull-left"></div>
+      </div>
+  </div>
+
+  <link rel="stylesheet" type="text/css" href="/assets/css/monokai.min.css">
+  <script type="text/javascript" src="/assets/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<!-- duoshuo div -->
+<div class="well">
+  <div class="ds-thread"></div>
+</div>
+
+<!-- Duoshuo Comment BEGIN -->
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tang-blog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=5&amp;mini=1&amp;pos=left&amp;uid=6635097" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+</script>
+<!-- Baidu Button END -->
+    <div class="footer">
+      &copy; 2013 唐久军 - Crafted with 
+        <a href="http://jekyllrb.com/"><strong>Jekyll</strong></a>, Hosted on 
+        <strong><a href="https://github.com/">GitHub</a></strong>
+        | 转载请遵守 <a href="http://creativecommons.org/licenses/by-sa/3.0/cn/">CC BY-SA 3.0</a> 协议
+        <span class="pull-right">
+          <strong>
+            <a href="https://github.com/tangjiujun">Fork me on GitHub </a>
+          </strong>
+        </span>
+    </div>
+  </body>
+</html>

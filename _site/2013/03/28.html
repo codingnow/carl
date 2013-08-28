@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Puppet 把管理的内容抽象为资源，每种资源具有不同的属性。因此 Puppet 语法就是描述这些资源的属性及资源间的关系。" />
+    <meta name="author" content="唐久军">
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/blog.css">
+    <script type="text/javascript" src="/assets/js/blog.js"></script>
+
+    <title>Puppet 基本语法使用详解</title>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-39325120-3']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+
+  </head>
+
+  <body>
+<div class="nav nav-fix-top">
+    <div class="navbar-panel">
+        <div class="brand">
+            <a href="/" class="light">唐久军的博客</a>
+        </div>
+
+        <div class="catalog pull-right">
+            <ul>
+                <li><a href="/categories.html">分类</a></li>
+                <li><a href="/tags.html">标签</a></li>
+                <li><a href="/projects.html">项目</a></li>
+                <li><a href="/archives.html">归档</a></li>
+                <li><a href="/about_me.html">关于我</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 防止 IE6、7 中定位元素导致相邻元素 margin-top 失效 -->
+<div style="height: 0px"></div>
+  <div class="well well-header">
+      <ul>
+          <li  class="badge badge-info badge-large pull-right">
+            <a href="/categories.html?#anchor服务器">分类：服务器</a></li>
+      </ul>
+      <ul>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorLinux">Linux</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorPuppet">Puppet</a>
+          </li>
+        
+      </ul>
+
+      <a class="time-backgroud"></a>
+      <span class="time-meta">2013年03月28日</span>
+      <h1>Puppet 基本语法使用详解</h1>
+      <hr>
+      <p>Puppet 把管理的内容抽象为资源，每种资源具有不同的属性。因此 Puppet 语法就是描述这些资源的属性及资源间的关系。</p>
+  </div>
+
+  <div class="well">
+    <h3>资源</h3>
+
+<ol>
+<li><p>定义一个资源，需要指定资源的<code>类型</code>和 <code>title</code>。 默认情况下 name 都等于 title，因此一般可以省略</p></li>
+<li><p>一个资源可以引用其它资源，引用资源时，资源类型的首字母必须大写</p></li>
+<li><p>可以在 site.pp 开头定义资源的默认值，格式如下：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">  File { owner =&gt; root, mode =&gt; 644 }
+</code></pre></div></li>
+<li><p>定义多个相同的资源时，可以用 [] 把所有资源的 title 写在一起</p></li>
+<li><p>定义资源间依赖：（before, require, notify，subscrib）详解</p></li>
+</ol>
+
+<h3>类和方法</h3>
+
+<ol>
+<li><p>可以使用 class 关键字定义一个类，类的作用就是把一组资源收集在一个盒子里买你，一起使用。如果其它地方要用到这组资源，直接包含就可以了，便于维护。引用一个类是，先要 import 这个类文件，然后再 include</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">import &quot;hello.pp&quot;        # 导入 hello.pp 文件
+include &quot;hello&quot;          # 包含 hello 类
+</code></pre></div></li>
+<li><p>我们可以使用 define 定义方法，并传入参数（ <code>$title</code> 获取资源名称 ）</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">define hello(content) {
+    file { &quot;/tmp/hello.txt&quot;:
+        content =&gt; $content;
+    }
+}
+# 调用
+hello {
+    &quot;test&quot;:
+    content =&gt; &quot;hello,world&quot;;
+}
+</code></pre></div></li>
+</ol>
+
+<h3>节点</h3>
+
+<p>Puppet 通过 node 来给不同的客服段分配不同的配置。没有指定的主机就用 default 的配置</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">node &#39;client-one.com&#39; {
+    ......
+}
+node default {
+    ......
+}
+</code></pre></div>
+<h3>变量和数组</h3>
+
+<ol>
+<li><p>用 $ 符号定义变量，变量内容用双引号括起来。变量有作用范围。<br>
+注意： puppet 可以使用 facter（一个 Ruby 写的工具），它可以帮我们收集系统信息，并整理成不同变量提交给 puppet 服务器。我们可以在客户端执行 <code>facter</code> 查看信息，并在服务器端直接通过变量名调用</p></li>
+<li><p>Puppet 支持两种格式数组，一种是用 <code>[]</code> ，一种是用 <code>split</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$package = [&#39;puppet&#39;, &#39;ruby&#39;]
+
+$package = &quot;puppet puppet-server ruby-doc&quot;
+$soft = split($package, &quot; &quot;)
+</code></pre></div></li>
+</ol>
+
+<h3>模块</h3>
+
+<p>1 模块简单来说，就是 <code>/etc/puppet/modules</code> 目录下的一个目录和它的子目录，然后在 <code>/etc/puppet/manifests/site.pp</code> 里面 import 模块名（模块名就是目录名）。引入模块可以结构化代码，便于分享和管理。</p>
+
+<ol>
+<li><p>一个模块通常包含三个目录 <code>files,manifests,templates</code>。 </p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">manifests 里必须包含一个 init.pp 文件，这是该模块的初始化文件，导入一个模块时，就从 init.pp 开始执行
+files 目录是该模块的文件发布目录
+templates 目录是 erb 模板文件
+</code></pre></div></li>
+</ol>
+
+<h3>常用资源</h3>
+
+<ul>
+<li><p>file 资源属性很多，介绍三个重要的  </p>
+
+<ul>
+<li>content 包含固定的内容<br></li>
+<li><p>source 指定 files 文件夹下的内容</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"># 假设：nginx 模块下有一个名为 hello 的文件
+
+file {
+    &quot;/etc/nginx/sites-available/hello&quot;:
+        source =&gt; &quot;puppet:///nginx/hello&quot;;
+}
+</code></pre></div></li>
+<li><p>template 调用 temples 目录下的 erb 模板文件</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">file {
+    ......
+    content =&gt; template(&quot;apache/httpd.conf.erb&quot;),
+}
+</code></pre></div></li>
+</ul></li>
+<li><p>package 资源包安装卸载管理。主要属性是 <code>ensure</code>，属性值为 <code>installed</code> 或者 <code>present</code> 为安装，为<code>absent</code> 或者 <code>pureged</code> 为不安装。<code>latest</code> 为安装最新版本</p></li>
+<li><p>service 资源保证 /etc/init.d 目录下的服务运行或停止。<code>ensure</code> 值为 <code>running</code> 或 <code>stoped</code></p></li>
+<li><p>exec 资源最好不用。它的功能就像我们在终端直接执行一条 shell 语句一样</p></li>
+</ul>
+
+  </div>
+
+  <!-- 底部导航条 -->
+  <div class="nav nav-fix-bottom"  id="nav-fix-bottom">
+      <div class="navbar-panel">
+          <div id="page-nav-list" class="catalog pull-left"></div>
+      </div>
+  </div>
+
+  <link rel="stylesheet" type="text/css" href="/assets/css/monokai.min.css">
+  <script type="text/javascript" src="/assets/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<!-- duoshuo div -->
+<div class="well">
+  <div class="ds-thread"></div>
+</div>
+
+<!-- Duoshuo Comment BEGIN -->
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tang-blog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=5&amp;mini=1&amp;pos=left&amp;uid=6635097" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+</script>
+<!-- Baidu Button END -->
+    <div class="footer">
+      &copy; 2013 唐久军 - Crafted with 
+        <a href="http://jekyllrb.com/"><strong>Jekyll</strong></a>, Hosted on 
+        <strong><a href="https://github.com/">GitHub</a></strong>
+        | 转载请遵守 <a href="http://creativecommons.org/licenses/by-sa/3.0/cn/">CC BY-SA 3.0</a> 协议
+        <span class="pull-right">
+          <strong>
+            <a href="https://github.com/tangjiujun">Fork me on GitHub </a>
+          </strong>
+        </span>
+    </div>
+  </body>
+</html>

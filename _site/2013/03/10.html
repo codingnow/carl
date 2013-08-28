@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Jekyll 是一个 Ruby 写的静态站点生成工具，使用 Jekyll 搭建博客框架；撰写文章使用 Markdown，省去排版，样式的烦恼；使用 git 版本管理博客内容，内容永不丢失，并支持免费部署在 Github 上。" />
+    <meta name="author" content="唐久军">
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/blog.css">
+    <script type="text/javascript" src="/assets/js/blog.js"></script>
+
+    <title>用 Jekyll 搭建个人博客</title>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-39325120-3']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+
+  </head>
+
+  <body>
+<div class="nav nav-fix-top">
+    <div class="navbar-panel">
+        <div class="brand">
+            <a href="/" class="light">唐久军的博客</a>
+        </div>
+
+        <div class="catalog pull-right">
+            <ul>
+                <li><a href="/categories.html">分类</a></li>
+                <li><a href="/tags.html">标签</a></li>
+                <li><a href="/projects.html">项目</a></li>
+                <li><a href="/archives.html">归档</a></li>
+                <li><a href="/about_me.html">关于我</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 防止 IE6、7 中定位元素导致相邻元素 margin-top 失效 -->
+<div style="height: 0px"></div>
+  <div class="well well-header">
+      <ul>
+          <li  class="badge badge-info badge-large pull-right">
+            <a href="/categories.html?#anchor其它">分类：其它</a></li>
+      </ul>
+      <ul>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorJekyll">Jekyll</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorMarkdown">Markdown</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorGit">Git</a>
+          </li>
+        
+      </ul>
+
+      <a class="time-backgroud"></a>
+      <span class="time-meta">2013年03月10日</span>
+      <h1>用 Jekyll 搭建个人博客</h1>
+      <hr>
+      <p>Jekyll 是一个 Ruby 写的静态站点生成工具，使用 Jekyll 搭建博客框架；撰写文章使用 Markdown，省去排版，样式的烦恼；使用 git 版本管理博客内容，内容永不丢失，并支持免费部署在 Github 上。</p>
+  </div>
+
+  <div class="well">
+    <h3>使用理由</h3>
+
+<ol>
+<li>使用 Markdown， 专心写博客，无样式排版烦恼</li>
+<li>使用自己喜欢的本地编辑器，本地随时写博客，可以本地预览，方便自己使用</li>
+<li>并使用 Git 管理博客，内容永不丢失</li>
+<li>可以部署在 github 上，不用自己购买管理 VPS，甚至域名也可以不买，对学生来说很适合</li>
+<li>没有第三方博客系统的广告，限制，随心而写</li>
+</ol>
+
+<h3>如何搭建</h3>
+
+<ol>
+<li>由于 Jekyll 是用 Ruby 写的，因此首先要搭建 Ruby 执行环境，同时安装 git 版本控制工具</li>
+<li>在 Github 上创建一个仓库，仓库名为 <code>github 账户名.github.com</code> 或者 <code>github 账户名.github.io</code></li>
+<li><p>克隆仓库到本地，并初始化仓库。然后发布博客，第一次发布后大约需要 <code>十分钟</code> 就可以通过 <code>yourname.github.com</code> 访问博客了</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">git clone https://github.com/yourname/yourname.github.com blog
+cd blog
+touch {README.md,index.html}        # 在 README.md 和 index.html 中加入内容
+git add .
+git commit -m &quot;初始化提交&quot;
+git push origin master
+</code></pre></div></li>
+<li><p>安装 Jekyll 规则搭建个人博客框架，具体参考 <a href="http://jekyllrb.com/" title="Jekyll 官方文档">Jekyll官方文档</a></p></li>
+</ol>
+
+<h3>Markdown 语法简记</h3>
+
+<ul>
+<li><code>1--6 级标题</code> 在行首使用 1-6 个 # 号</li>
+<li><code>块引用</code> 在一段的第一行前面加上 &gt; 表示一个区块引用， &gt; 可以嵌套</li>
+<li><code>列表</code> 无序列表 使用 *、 + 或是 - 作为列表标记，有序列表 则使用 数字接着一个英文句点</li>
+<li><code>代码</code> 缩进 4 个空格 表示一个代码块， 使用 反引号（`）  标记一小段行内代码</li>
+<li><code>强调</code> 用一个 * 或 _ 包围转成 &lt;em&gt; 标签，用两个 * 或 _ 包围转成 &lt;strong&gt; 标签，</li>
+<li><code>分割线</code> 用三个以上的 *、 -、 _ 来建立一个分隔线，行内不能有其他东西</li>
+<li><p><code>超链接和图片链接</code> 图片链接和超链接基本相同，图片链接多一个 ！。都有两种样式：行内式 和 参考式</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">行内式：
+    [唐久军的博客](http://tangjiujun.github.io &quot;唐久军的博客&quot;)
+
+参考式：
+    [唐久军的博客][tangjiujun]
+    [tangjiujun]: http://tangjiujun.github.io &quot;唐久军的博客&quot;        # 此行可以放在文章的任意位置
+</code></pre></div></li>
+<li><p><code>反斜杠和自动链接</code> 特殊字符可用 \ 转义； 把 网址 或 电子邮件信箱 用 &lt;&gt; 包起来，会自动链接</p></li>
+<li><p><code>表格</code> 不是 Markdown 的标准语法</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">|     用户名     |     年龄     |
+| ------------- | ----------- |
+|     唐久军     |     21      |
+|     成婉君     |     21      |
+</code></pre></div></li>
+</ul>
+
+<h3>emacs 插件</h3>
+
+<p>从 github 上找了一个 <a href="https://github.com/diasjorge/jekyll.el" title="Emacs Jekyll 插件">emacs jekyll 插件</a>，并稍做修改（修改快捷键绑定，取消大小写转换，支持中文）。这里是<a href="https://github.com/tangjiujun/emacs.d/blob/master/custom-util/jekyll.el" title="修改后的 Emacs Jekyll 插件">修改后的插件</a></p>
+
+<ol>
+<li><p>配置插件：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(setq jekyll-directory &quot;/home/tangjiujun/Dropbox/Yunio/blog/&quot;)        # 设置博客根目录
+(require &#39;jekyll)
+(jekyll-init-keybindings)
+</code></pre></div></li>
+<li><p>插件使用：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">C-c j n        # 新建草稿
+C-c j p        # 发布当前编辑的草稿
+
+C-c j d        # 列出所有的草稿
+C-c j l        # 列出所有发布的文章
+</code></pre></div></li>
+</ol>
+
+  </div>
+
+  <!-- 底部导航条 -->
+  <div class="nav nav-fix-bottom"  id="nav-fix-bottom">
+      <div class="navbar-panel">
+          <div id="page-nav-list" class="catalog pull-left"></div>
+      </div>
+  </div>
+
+  <link rel="stylesheet" type="text/css" href="/assets/css/monokai.min.css">
+  <script type="text/javascript" src="/assets/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<!-- duoshuo div -->
+<div class="well">
+  <div class="ds-thread"></div>
+</div>
+
+<!-- Duoshuo Comment BEGIN -->
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tang-blog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=5&amp;mini=1&amp;pos=left&amp;uid=6635097" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+</script>
+<!-- Baidu Button END -->
+    <div class="footer">
+      &copy; 2013 唐久军 - Crafted with 
+        <a href="http://jekyllrb.com/"><strong>Jekyll</strong></a>, Hosted on 
+        <strong><a href="https://github.com/">GitHub</a></strong>
+        | 转载请遵守 <a href="http://creativecommons.org/licenses/by-sa/3.0/cn/">CC BY-SA 3.0</a> 协议
+        <span class="pull-right">
+          <strong>
+            <a href="https://github.com/tangjiujun">Fork me on GitHub </a>
+          </strong>
+        </span>
+    </div>
+  </body>
+</html>

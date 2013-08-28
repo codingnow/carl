@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="puppet 是一个强大自动化系统部署工具，本文主要讲解 puppet C/S 模式的安装和配置。以及在配置过程中遇到问题的解决思路" />
+    <meta name="author" content="唐久军">
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/blog.css">
+    <script type="text/javascript" src="/assets/js/blog.js"></script>
+
+    <title>Puppet 安装和服务器 客户端配置</title>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-39325120-3']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+
+  </head>
+
+  <body>
+<div class="nav nav-fix-top">
+    <div class="navbar-panel">
+        <div class="brand">
+            <a href="/" class="light">唐久军的博客</a>
+        </div>
+
+        <div class="catalog pull-right">
+            <ul>
+                <li><a href="/categories.html">分类</a></li>
+                <li><a href="/tags.html">标签</a></li>
+                <li><a href="/projects.html">项目</a></li>
+                <li><a href="/archives.html">归档</a></li>
+                <li><a href="/about_me.html">关于我</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 防止 IE6、7 中定位元素导致相邻元素 margin-top 失效 -->
+<div style="height: 0px"></div>
+  <div class="well well-header">
+      <ul>
+          <li  class="badge badge-info badge-large pull-right">
+            <a href="/categories.html?#anchor服务器">分类：服务器</a></li>
+      </ul>
+      <ul>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorLinux">Linux</a>
+          </li>
+        
+          <li  class="badge badge-inverse pull-right">
+              <a href="/tags.html?#anchorPuppet">Puppet</a>
+          </li>
+        
+      </ul>
+
+      <a class="time-backgroud"></a>
+      <span class="time-meta">2013年03月26日</span>
+      <h1>Puppet 安装和服务器 客户端配置</h1>
+      <hr>
+      <p>puppet 是一个强大自动化系统部署工具，本文主要讲解 puppet C/S 模式的安装和配置。以及在配置过程中遇到问题的解决思路</p>
+  </div>
+
+  <div class="well">
+    <h3>安装前准备</h3>
+
+<p>准备两台虚拟机</p>
+
+<ol>
+<li><p>配置 IP（修改 /etc/network/interfaces）：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">服务端： 192.168.122.121
+客户端： 192.168.122.122
+</code></pre></div></li>
+<li><p>配置 主机名（修改 /ect/hostname)后重启：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">服务端： server.com
+客户端： client.com
+</code></pre></div></li>
+<li><p>ping 主机名，如果不能解析，自己修改 /etc/hosts 文件，配置如下：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">服务端：
+    127.0.0.1          localhost
+    127.0.1.1          server.com
+    192.168.122.122    client.com
+客户端：
+    127.0.0.1          localhost
+    127.0.1.1          client.com
+    192.168.122.121    server.com
+</code></pre></div></li>
+</ol>
+
+<h3>安装 Puppet</h3>
+
+<ol>
+<li><p>服务器端安装：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">apt-get install puppetmaster    # 安装后重启服务器
+netstat -nlp | grep 8140        # 重启后检测服务器端口是否开启
+</code></pre></div></li>
+<li><p>客户端安装：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">apt-get install puppet
+</code></pre></div></li>
+</ol>
+
+<h3>配置 Puppet</h3>
+
+<ol>
+<li><p>Puppet 的第一个执行的代码是在 <code>/ect/puppet/manifests/site.pp</code>。因此这个文件必须存在，而且其他的代码也要通过代码来调用，我们先新建一个简单的 site.pp 文件，内容如下：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">   nnode default {
+       file {
+           &quot;/tmp/test.txt&quot;:
+           content =&gt;  &quot;hello, world!&quot;;
+       }
+   }
+</code></pre></div></li>
+<li><p>客户端生成证书，并请求服务器认证：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"> $ puppet agent --server server.com --test
+</code></pre></div></li>
+<li><p>服务器端查看请求证书，并认证客户端：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text"> $ puppet cert --list
+   # 如果看到如下内容，则表示有客户端请求：
+   &quot;client.com&quot; (6E:B5:2A:79:44:96:F0:8A:47:7B:EC:6B:B7:8B:2F:DB) 
+
+ $ puppet cert --all               # 允许所有的主机通过请求
+</code></pre></div></li>
+<li><p>再次在客户端运行命令：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ puppet agent --server server.com --test
+# 如果成功就可以看到 /tmp/test.txt 文件的内容为 “hello,world!”
+</code></pre></div>
+<p>然后，我就恭喜你已经完成了 Puppet C/S 端的基本配置了，然后就可以重复执行第 4 步来从服务器端更新配置了。</p></li>
+</ol>
+
+<h3>配置问题解决思路</h3>
+
+<ol>
+<li>检查 服务器端 和 客户端 是否配置正确主机名</li>
+<li>两台机器是否可以通过 主机名 ping 通</li>
+<li>在更改主机名后是否删除以前生成的 ssl 证书，如果没有可以直接删除 <code>/var/lib/puppet</code> 目录，后重新生成证书</li>
+</ol>
+
+  </div>
+
+  <!-- 底部导航条 -->
+  <div class="nav nav-fix-bottom"  id="nav-fix-bottom">
+      <div class="navbar-panel">
+          <div id="page-nav-list" class="catalog pull-left"></div>
+      </div>
+  </div>
+
+  <link rel="stylesheet" type="text/css" href="/assets/css/monokai.min.css">
+  <script type="text/javascript" src="/assets/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+<!-- duoshuo div -->
+<div class="well">
+  <div class="ds-thread"></div>
+</div>
+
+<!-- Duoshuo Comment BEGIN -->
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tang-blog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- Duoshuo Comment END -->
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=5&amp;mini=1&amp;pos=left&amp;uid=6635097" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+</script>
+<!-- Baidu Button END -->
+    <div class="footer">
+      &copy; 2013 唐久军 - Crafted with 
+        <a href="http://jekyllrb.com/"><strong>Jekyll</strong></a>, Hosted on 
+        <strong><a href="https://github.com/">GitHub</a></strong>
+        | 转载请遵守 <a href="http://creativecommons.org/licenses/by-sa/3.0/cn/">CC BY-SA 3.0</a> 协议
+        <span class="pull-right">
+          <strong>
+            <a href="https://github.com/tangjiujun">Fork me on GitHub </a>
+          </strong>
+        </span>
+    </div>
+  </body>
+</html>
