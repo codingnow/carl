@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Hello World"
+title: "笨笨"
 description: ""
 category: 
 tags: []
 ---
 {% include JB/setup %}
-ni mei de 
+阿斯顿法国人他人也人也
