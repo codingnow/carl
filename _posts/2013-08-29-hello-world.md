@@ -2,7 +2,7 @@
 layout: post
 title: "笨笨"
 description: ""
-category: 
+category: abc
 tags: [inerview]
 ---
 {% include JB/setup %}
