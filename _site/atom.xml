@@ -4,13 +4,21 @@
  <title></title>
  <link href="/" rel="self"/>
  <link href=""/>
- <updated>2013-08-29T11:32:50+08:00</updated>
+ <updated>2013-08-29T11:49:52+08:00</updated>
  <id></id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Hello World</title>
+   <link href="/2013/08/29/hello-world.html"/>
+   <updated>2013-08-29T00:00:00+08:00</updated>
+   <id>/2013/08/29/hello-world</id>
+   <content type="html"></content>
+ </entry>
  
  <entry>
    <title>Jekyll Introduction</title>

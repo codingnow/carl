@@ -5,10 +5,18 @@
         <description> - </description>
         <link></link>
         <link></link>
-        <lastBuildDate>2013-08-29T11:32:50+08:00</lastBuildDate>
-        <pubDate>2013-08-29T11:32:50+08:00</pubDate>
+        <lastBuildDate>2013-08-29T11:49:52+08:00</lastBuildDate>
+        <pubDate>2013-08-29T11:49:52+08:00</pubDate>
         <ttl>1800</ttl>
 
+
+        <item>
+                <title>Hello World</title>
+                <description></description>
+                <link>/2013/08/29/hello-world.html</link>
+                <guid>/2013/08/29/hello-world</guid>
+                <pubDate>2013-08-29T00:00:00+08:00</pubDate>
+        </item>
 
         <item>
                 <title>Jekyll Introduction</title>
