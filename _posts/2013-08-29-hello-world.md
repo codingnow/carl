@@ -3,7 +3,7 @@ layout: post
 title: "笨笨"
 description: ""
 category: 
-tags: []
+tags: [inerview]
 ---
 {% include JB/setup %}
 
