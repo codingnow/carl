@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Hello
-tagline: qinghua
+title: 
+tagline: 
 ---
 {% include JB/setup %}
 
