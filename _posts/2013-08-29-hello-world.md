@@ -2,8 +2,9 @@
 layout: post
 title: "笨笨"
 description: ""
-category: abc
-tags: [inerview]
+tagline: "Supporting tagline"
+category: android
+tags: [c,git]
 ---
 {% include JB/setup %}
 
