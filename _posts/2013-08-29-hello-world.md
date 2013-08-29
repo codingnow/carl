@@ -2,7 +2,6 @@
 layout: post
 title: "笨笨"
 description: ""
-tagline: "Supporting tagline"
 category: android
 tags: [c,git]
 ---
