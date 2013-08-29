@@ -6,7 +6,7 @@ tagline: 蔡青华
 {% include JB/setup %}
 
 
-##MY list
+##MY lists
 
 <ul class="posts">
   {% for post in site.posts %}
