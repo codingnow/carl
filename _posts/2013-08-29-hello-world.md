@@ -7,8 +7,6 @@ tags: [c,git]
 ---
 {% include JB/setup %}
 
-
-fasf
 {% highlight c %}
 /* hello world demo */
 #include <stdio.h>
@@ -18,6 +16,4 @@ int main(int argc, char **argv)
     return 0;
 }
 {% endhighlight %}
-
-c
 
