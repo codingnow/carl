@@ -12,7 +12,15 @@ tags: [c,git]
 发大水发
 
 fasf
-
+{% highlight c %}
+/* hello world demo */
+#include <stdio.h>
+int main(int argc, char **argv)
+{
+    printf("Hello, World!\n");
+    return 0;
+}
+{% endhighlight %}
 
 adf
 
