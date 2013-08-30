@@ -9,7 +9,7 @@ markdown: rdiscount
 paginate: 7
 
 # Themes are encouraged to use these universal variables 
-# so be sure to set them if your theme uses them.
+# so be esure to set them if your theme uses them.
 #
 title :  caiqh Blog
 tagline: Site Tagline
