@@ -1,7 +1,7 @@
 ---
 layout: page
-title: djtyjutk
-tagline: Supporting tagline
+title: 啥玩意
+tagline: 
 ---
 {% include JB/setup %}
 
