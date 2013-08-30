@@ -1,7 +1,6 @@
 ---
 layout: page
 title: 
-tagline:hjyt
 ---
 {% include JB/setup %}
 
