@@ -1,7 +1,5 @@
 ---
 layout: page
-title: shawanyi
-tagline: Supporting tagline
 ---
 {% include JB/setup %}
 
