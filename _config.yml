@@ -30,6 +30,7 @@ production_url : http://codingnow.github.io/carl
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
+
 JB :
   version : 0.3.0
 
