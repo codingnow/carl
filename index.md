@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 啥玩意
+title: shawanyi
 tagline: 
 ---
 {% include JB/setup %}
