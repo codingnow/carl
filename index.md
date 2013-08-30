@@ -4,7 +4,7 @@ layout: page
 {% include JB/setup %}
 
 
-##My list ---
+My list ---
 
 
 <ul class="posts">
