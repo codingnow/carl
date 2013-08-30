@@ -19,10 +19,6 @@ int main(int argc, char **argv)
 }
 {% endhighlight %}
 
-adf
-
-
-vzcv
 r
 c
 
