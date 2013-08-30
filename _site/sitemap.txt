@@ -1,0 +1,15 @@
+
+http://codingnow.github.io/carl/archive.html
+http://codingnow.github.io/carl/sitemap.txt
+http://codingnow.github.io/carl/pages.html
+http://codingnow.github.io/carl/tags.html
+http://codingnow.github.io/carl/atom.xml
+http://codingnow.github.io/carl/rss.xml
+http://codingnow.github.io/carl/categories.html
+http://codingnow.github.io/carl/index.html
+http://codingnow.github.io/carl/go.html
+http://codingnow.github.io/carl/about.html
+
+http://codingnow.github.io/carl/coding/2013/08/30/image
+http://codingnow.github.io/carl/coding/2013/08/29/hello-world
+http://codingnow.github.io/carl/coding/2011/12/29/jekyll-introduction
