@@ -12,7 +12,9 @@ tags: [c,git]
 #include <stdio.h>
 int main(int argc, char **argv)
 {
+     int a;
     printf("Hello, World!\n");
+    
     return 0;
 }
 {% endhighlight %}
