@@ -1,5 +1,6 @@
 ---
 layout: page
+title: "床前明月光 ..."
 ---
 {% include JB/setup %}
 
