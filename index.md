@@ -1,6 +1,10 @@
 ---
 layout: page
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+title: "床前明月光 ..."
+>>>>>>> fbddda528b0f3b41a8a27bccf06ede8a72dee3d3
 ---
 {% include JB/setup %}
 
@@ -18,6 +22,7 @@ layout: page
 
 
 
+<<<<<<< HEAD
 ’end‘
 =======
 title: Hello World!
@@ -63,5 +68,9 @@ Here's a sample "posts list".
 This theme is still unfinished. If you'd like to be added as a contributor, [please fork](http://github.com/plusjade/jekyll-bootstrap)!
 We need to clean up the themes, make theme usage guides with theme-specific markup examples.
 >>>>>>> 010d99fb5d1099de13621daade7bb51effe87647
+=======
+
+
+>>>>>>> fbddda528b0f3b41a8a27bccf06ede8a72dee3d3
 
 
