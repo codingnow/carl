@@ -82,7 +82,11 @@ Jekyll-bootstrap conveniently provides the base directory format.
 ### The Jekyll Application Base Format
 
 Jekyll expects your website directory to be laid out like so:
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 010d99fb5d1099de13621daade7bb51effe87647
     .
     |-- _config.yml
     |-- _includes
@@ -409,4 +413,8 @@ Jekyll-bootstrap is intended to provide helper methods and strategies aimed at m
 ## Next Steps
 
 Please take a look at [{{ site.categories.api.first.title }}]({{ BASE_PATH }}{{ site.categories.api.first.url }}) 
+<<<<<<< HEAD
 or jump right into [Usage]({{ BASE_PATH }}{{ site.categories.usage.first.url }}) if you'd like.
+=======
+or jump right into [Usage]({{ BASE_PATH }}{{ site.categories.usage.first.url }}) if you'd like.
+>>>>>>> 010d99fb5d1099de13621daade7bb51effe87647
